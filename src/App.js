@@ -2,9 +2,12 @@ import { useState } from 'react';
 import Autocomplete from 'react-google-autocomplete';
 import { Container, TextField, Typography, Card, CardContent, Grid, Button, Box, List, ListItem, ListItemText, Link } from '@mui/material';
 import Place from './Place';
+//import dotenv from 'dotenv';
 
-const WEATHER_API_KEY = '6616f991e59cdcf88cda2f2b4d6c73ed';
-const GOOGLE_API_KEY = 'AIzaSyBLd_kR2bLVqLLVDrZ-1oBgN5hTqLmRfgM';
+//dotenv.config();  // Load .env file
+
+const GOOGLE_API_KEY = process.env.REACT_APP_GOOGLE_API_KEY;
+const WEATHER_API_KEY = process.env.REACT_APP_WEATHER_API_KEY;
 
 export default function TravelApp() {
   const [places, setPlaces] = useState([]);
@@ -13,7 +16,7 @@ export default function TravelApp() {
 
   // Function to fetch places
   const fetchPlaces = (location) => {
-    fetch(`http://localhost:5000/places?lat=${location.lat()}&lng=${location.lng()}`)
+    fetch(`http://localhost:5001/places?lat=${location.lat()}&lng=${location.lng()}`)
       .then((response) => response.json())
       .then((data) => {
         const filteredPlaces = data.results.filter(

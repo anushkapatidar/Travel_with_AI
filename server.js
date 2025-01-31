@@ -1,11 +1,15 @@
 import fetch from 'node-fetch';
 import express from 'express';
 import cors from 'cors';
+import dotenv from 'dotenv'
+
+dotenv.config();  // Load .env file
 
 const app = express();
 app.use(cors());
 
-const GOOGLE_API_KEY = "AIzaSyBLd_kR2bLVqLLVDrZ-1oBgN5hTqLmRfgM";
+// Use environment variable for Google API key
+const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
 
 // Function to fetch places by type or keyword
 const fetchPlacesByType = async (lat, lng, type, keyword = "") => {
@@ -70,4 +74,4 @@ app.get("/places", async (req, res) => {
 });
 
 // Start the server
-app.listen(5000, () => console.log("Server running on port 5000"));
+app.listen(5001, () => console.log("Server running on port 5001"));
