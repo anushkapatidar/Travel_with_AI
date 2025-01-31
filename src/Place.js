@@ -1,6 +1,6 @@
 import { Card, CardMedia, CardContent, Typography, Box } from '@mui/material';
 
-const GOOGLE_API_KEY = 'AIzaSyBLd_kR2bLVqLLVDrZ-1oBgN5hTqLmRfgM';
+const GOOGLE_API_KEY = process.env.REACT_APP_GOOGLE_API_KEY;
 
 const Place = ({ place }) => (
   <Card sx={{ maxWidth: 345, margin: 'auto', mb: 2, boxShadow: 3 }}>
