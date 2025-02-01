@@ -9,11 +9,11 @@ const app = express();
 app.use(cors());
 
 // Use environment variable for Google API key
-const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
+const GOOGLE_API_KEY = process.env.REACT_APP_GOOGLE_API_KEY;
 
 // Function to fetch places by type or keyword
 const fetchPlacesByType = async (lat, lng, type, keyword = "") => {
-    let url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=5000&key=${GOOGLE_API_KEY}`;
+    let url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=50000&key=${GOOGLE_API_KEY}`;
 
     if (keyword) {
         url += `&keyword=${encodeURIComponent(keyword)}`;
@@ -48,20 +48,22 @@ app.get("/places", async (req, res) => {
 
     try {
         // Fetch different place types, including hotels & restaurants
-        const [touristAttractions, historicalPlaces, outdoorAttractions, restaurants, hotels, temples, jyotirlingas, Trekkings] = await Promise.all([
+        const [touristAttractions, historicalPlaces, outdoorAttractions, restaurants, hotels, temples, jyotirlingas, Trekkings, Zoo, Wildlife] = await Promise.all([
             fetchPlacesByType(lat, lng, "tourist_attraction"),
             fetchPlacesByType(lat, lng, "museum"),
             fetchPlacesByType(lat, lng, "park"),
-            fetchPlacesByType(lat, lng, "restaurant"),  // Ensures restaurants are fetched
-            fetchPlacesByType(lat, lng, "lodging"), // "lodging" covers hotels, resorts, motels
+            fetchPlacesByType(lat, lng, "restaurant"),
+            fetchPlacesByType(lat, lng, "lodging"), 
             fetchPlacesByType(lat, lng, "hindu_temple"),
             fetchPlacesByType(lat, lng, "", "Jyotirlinga"),
-            fetchPlacesByType(lat, lng, "", "Trekking")
+            fetchPlacesByType(lat, lng, "", "Trekking"),
+            fetchPlacesByType(lat, lng, "", "Zoo"),
+            fetchPlacesByType(lat, lng, "", "Wildlife")
         ]);
 
         // Combine and remove duplicates
         const uniquePlaces = {};
-        [...touristAttractions, ...historicalPlaces, ...outdoorAttractions, ...restaurants, ...hotels, ...temples, ...jyotirlingas, ...Trekkings].forEach(place => {
+        [...touristAttractions, ...historicalPlaces, ...outdoorAttractions, ...restaurants, ...hotels, ...temples, ...jyotirlingas, ...Trekkings, ...Zoo, ...Wildlife].forEach(place => {
             uniquePlaces[place.place_id] = place;
         });
 
@@ -75,3 +77,5 @@ app.get("/places", async (req, res) => {
 
 // Start the server
 app.listen(5001, () => console.log("Server running on port 5001"));
+
+
